@@ -3,8 +3,7 @@ import {
     saveToLocalStorage
 } from './utilities/localStorage';
 
-const d = document;
-const html = d.documentElement;
+const html = document.documentElement;
 const loadedClass = 'fonts-loaded';
 const record = fetchFromLocalStorage(loadedClass);
 
@@ -14,11 +13,11 @@ function addLoadedClass() {
 
 if (record) {
     addLoadedClass();
-} else if ('fonts' in d) {
+} else if ('fonts' in document) {
     Promise.all([
-        d.fonts.load("300 1em 'Work Sans'"),
-        d.fonts.load("400 1em 'Work Sans'"),
-        d.fonts.load("600 1em 'Work Sans'")
+        document.fonts.load("300 1em 'Work Sans'"),
+        document.fonts.load("400 1em 'Work Sans'"),
+        document.fonts.load("600 1em 'Work Sans'")
     ])
         .then(() => {
             addLoadedClass();
@@ -30,8 +29,8 @@ if (record) {
         })
         .catch(console.warn);
 } else {
-    const script = d.createElement('script');
+    const script = document.createElement('script');
     script.src = 'js/font-loading-fallback.js';
     script.async = true;
-    d.head.appendChild(script);
+    document.head.appendChild(script);
 }

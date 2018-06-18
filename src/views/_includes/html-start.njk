@@ -11,8 +11,8 @@
         <link rel="preload" href="assets/fonts/work-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 
         {# `inline` attribute used by gulp `inlineCritial` task #}
-        <link href="css/main.css" rel="stylesheet" type="text/css" inline>
-        <script src="js/head.js" inline></script>
+        <link href="css/main.css" rel="stylesheet" type="text/css" data-inline>
+        <script src="js/head.js" data-inline></script>
 
         {% if canonical_url %}
             <link rel="canonical" href="{{ canonical_url }}">
