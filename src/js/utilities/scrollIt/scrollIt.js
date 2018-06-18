@@ -1,9 +1,7 @@
 import easingFunctions from './easingFunctions';
 
-const w = window;
-const d = document;
-const html = d.documentElement;
-const body = d.body; // eslint-disable-line
+const html = document.documentElement;
+const { body } = document;
 
 // Modified from: https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
 export default function scrollIt({
@@ -13,7 +11,7 @@ export default function scrollIt({
     callback
 }) {
     // Store initial scroll position and time
-    const start = w.pageYOffset;
+    const start = window.pageYOffset;
     const startTime = new Date().getTime();
 
     // Calculate the max scrollable value
@@ -26,9 +24,9 @@ export default function scrollIt({
     );
 
     const winHeight =
-        w.innerHeight ||
+        window.innerHeight ||
         html.clientHeight ||
-        d.getElementsByTagName('body')[0].clientHeight;
+        document.getElementsByTagName('body')[0].clientHeight;
 
     const destinationOffsetToScroll = Math.round(
         docHeight - destination < winHeight
@@ -38,7 +36,7 @@ export default function scrollIt({
 
     // If `requestAnimationFrame` is not supported...
     if (!('requestAnimationFrame' in window)) {
-        w.scrollTo(0, destinationOffsetToScroll);
+        window.scrollTo(0, destinationOffsetToScroll);
 
         if (callback && typeof callback === 'function') {
             callback();
@@ -48,12 +46,12 @@ export default function scrollIt({
     }
 
     function scroll() {
-        const scrollY = w.pageYOffset;
+        const scrollY = window.pageYOffset;
         const now = new Date().getTime();
         const time = Math.min(1, (now - startTime) / duration);
         const easingFunc = easingFunctions[easing](time);
 
-        w.scroll(
+        window.scroll(
             0,
             Math.ceil(easingFunc * (destinationOffsetToScroll - start) + start)
         );

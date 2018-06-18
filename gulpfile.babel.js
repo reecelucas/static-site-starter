@@ -62,7 +62,9 @@ const files = {
 gulp.task('inlineCritial', ['assets', 'scss', 'js'], () =>
     gulp
         .src(files.html.src)
-        .pipe(inlinesource())
+        .pipe(inlinesource({
+            attribute: 'data-inline'
+        }))
         .pipe(gulp.dest(files.html.dest))
 );
 

@@ -1,6 +1,5 @@
-const d = document;
-const html = d.documentElement;
-const body = d.body; // eslint-disable-line
+const html = document.documentElement;
+const { body } = document;
 
 let bodyBlocked = false;
 
