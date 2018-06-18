@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 
-// Utils
+// UTILS
 const buffer = require('gulp-buffer');
 const camelCase = require('camelcase');
 const glob = require('glob');
