@@ -1,6 +1,7 @@
 const gulp = require('gulp');
+const browserSync = require('browser-sync');
 
-// Utils
+// UTILS
 const buffer = require('gulp-buffer');
 const camelCase = require('camelcase');
 const glob = require('glob');
@@ -10,6 +11,8 @@ const minimist = require('minimist');
 const path = require('path');
 const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
+const portscanner = require('portscanner');
+const shell = require('gulp-shell');
 
 // JS
 const babel = require('rollup-plugin-babel');
@@ -20,12 +23,11 @@ const uglify = require('gulp-uglify');
 
 // SCSS/CSS
 const autoprefixer = require('autoprefixer');
-const cleanCSS = require('gulp-clean-css');
 const cssmqpacker = require('css-mqpacker');
 const postcss = require('gulp-postcss');
 const postcssDiscardDuplicates = require('postcss-discard-duplicates');
-const purify = require('gulp-purifycss');
 const sass = require('gulp-sass');
+const purgecss = require('gulp-purgecss');
 
 // HTML & IMAGES
 const htmlmin = require('gulp-htmlmin');
@@ -35,8 +37,24 @@ const inlinesource = require('gulp-inline-source');
 // Helpers
 const CLI_ARGUMENTS = minimist(process.argv.slice(2), { string: 'env' });
 const isProduction = CLI_ARGUMENTS.env === 'production';
+const server = browserSync.create();
+const assignAvailablePort = initialPort => {
+    let port = initialPort;
+    const portInUse = () => {
+        portscanner.findAPortInUse(port, () => true);
+    };
 
-const files = {
+    while (portInUse(port)) {
+        port += 1;
+    }
+
+    return port;
+};
+
+const paths = {
+    templates: {
+        src: './src/views/**/*'
+    },
     html: {
         src: './dist/*.html',
         dest: './dist'
@@ -59,18 +77,31 @@ const files = {
     }
 };
 
-gulp.task('inlineCritial', ['assets', 'scss', 'js'], () =>
-    gulp
-        .src(files.html.src)
-        .pipe(inlinesource({
-            attribute: 'data-inline'
-        }))
-        .pipe(gulp.dest(files.html.dest))
-);
+const serverConfig = {
+    open: 'local',
+    port: assignAvailablePort(isProduction ? 8080 : 8000),
+    server: './dist',
+    ui: {
+        port: assignAvailablePort(isProduction ? 8081 : 8001)
+    },
+    watch: !isProduction // "Hot reload" when `html` files change
+};
+
+gulp.task('serve', done => {
+    server.init(serverConfig);
+    done();
+});
+
+gulp.task('reload', done => {
+    server.reload();
+    done();
+});
+
+gulp.task('templates', shell.task('eleventy'));
 
 gulp.task('html', ['inlineCritial'], () =>
     gulp
-        .src(files.html.src)
+        .src(paths.html.src)
         .pipe(
             htmlmin({
                 collapseBooleanAttributes: true,
@@ -84,7 +115,7 @@ gulp.task('html', ['inlineCritial'], () =>
                 removeStyleLinkTypeAttributes: true
             })
         )
-        .pipe(gulp.dest(files.html.dest))
+        .pipe(gulp.dest(paths.html.dest))
 );
 
 gulp.task('scss', () => {
@@ -95,24 +126,25 @@ gulp.task('scss', () => {
     ];
 
     return gulp
-        .src(files.scss.src)
+        .src(paths.scss.src)
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass().on('error', sass.logError))
+        .pipe(postcss(plugins))
         .pipe(
             gulpif(
                 isProduction,
-                purify([files.js.src, files.html.src], { info: true })
+                purgecss({
+                    content: [paths.html.src]
+                })
             )
         )
-        .pipe(gulpif(isProduction, cleanCSS({ compatibility: 'ie10' })))
-        .pipe(postcss(plugins))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(files.scss.dest)); // Write sourcemaps to a separate file
+        .pipe(gulp.dest(paths.scss.dest)); // Write sourcemaps to a separate file
 });
 
 gulp.task('js', () =>
     merge(
-        glob.sync(files.js.src).map(entry => {
+        glob.sync(paths.js.src).map(entry => {
             // Take file name from full path & strip `.js` extension
             const fileName = entry.replace(/^.*[\\/]/, '').slice(0, -3);
 
@@ -133,12 +165,12 @@ gulp.task('js', () =>
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(gulpif(isProduction, uglify()))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(files.js.dest))
+        .pipe(gulp.dest(paths.js.dest))
 );
 
 gulp.task('assets', () =>
     gulp
-        .src(files.assets.src)
+        .src(paths.assets.src)
         .pipe(
             gulpif(
                 isProduction,
@@ -151,29 +183,36 @@ gulp.task('assets', () =>
                 ])
             )
         )
-        .pipe(gulp.dest(files.assets.dest))
+        .pipe(gulp.dest(paths.assets.dest))
 );
 
 gulp.task('copy', () =>
-    gulp
-        .src(files.copy.src)
-        .pipe(gulp.dest(files.copy.dest))
+    gulp.src(paths.copy.src).pipe(gulp.dest(paths.copy.dest))
 );
 
-// Views/templates are watched by `Eleventy`
+gulp.task('inlineCritial', ['templates', 'assets', 'scss', 'js'], () =>
+    gulp
+        .src(paths.html.src)
+        .pipe(
+            inlinesource({
+                attribute: 'data-inline'
+            })
+        )
+        .pipe(gulp.dest(paths.html.dest))
+);
+
 gulp.task('watch', () => {
-    gulp.watch(files.scss.src, () => {
-        gulp.run('scss');
-    });
-
-    gulp.watch(files.js.src, () => {
-        gulp.run('js');
-    });
-
-    gulp.watch(files.assets.src, () => {
-        gulp.run('assets');
-    });
+    /**
+     * We don't call `reload` after running the `templates`
+     * task because `BrowserSync` is set up to watch the
+     * generated `html` files.
+     */
+    gulp.watch(paths.templates.src, ['templates']);
+    gulp.watch(paths.scss.src, ['scss', 'reload']);
+    gulp.watch(paths.js.src, ['js', 'reload']);
+    gulp.watch(paths.assets.src, ['assets', 'reload']);
 });
 
-gulp.task('default', ['assets', 'scss', 'js', 'copy', 'watch']);
-gulp.task('build', ['html', 'assets', 'scss', 'js', 'copy']);
+gulp.task('default', ['templates', 'scss', 'js', 'assets', 'copy', 'serve', 'watch']);
+gulp.task('build', ['html', 'scss', 'js', 'assets', 'copy', 'serve']);
+gulp.task('build:server', ['html', 'scss', 'js', 'assets', 'copy']);

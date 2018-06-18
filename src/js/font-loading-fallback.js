@@ -1,7 +1,6 @@
 import 'fontfaceobserver';
 import { saveToLocalStorage } from './utilities/localStorage';
 
-
 const loadedClass = 'fonts-loaded';
 const fontA = new window.FontFaceObserver('Work Sans', { weight: 300 });
 const fontB = new window.FontFaceObserver('Work Sans', { weight: 400 });
