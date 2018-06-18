@@ -1,0 +1,13 @@
+/* ==========================================================================
+   #EVENTS
+   ========================================================================== */
+
+// Use '!important' deliberately here – we always want trump classes to take.
+
+.u-prevent-events {
+    pointer-events: none !important;
+}
+
+.u-no-scroll {
+    overflow-y: hidden !important;
+}

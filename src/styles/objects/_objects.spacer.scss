@@ -1,0 +1,28 @@
+/* ==========================================================================
+   #SPACER
+   ========================================================================== */
+
+.o-spacer {
+    margin-bottom: rem-calc($global-spacing-unit);
+}
+
+
+/* Style variants
+   ========================================================================== */
+
+.o-spacer--tiny {
+    margin-bottom: rem-calc($global-spacing-unit-tiny);
+}
+
+.o-spacer--small {
+    margin-bottom: rem-calc($global-spacing-unit-small);
+}
+
+.o-spacer--large {
+    margin-bottom: rem-calc($global-spacing-unit-large);
+}
+
+.o-spacer--huge {
+    margin-bottom: rem-calc($global-spacing-unit-huge);
+}
+

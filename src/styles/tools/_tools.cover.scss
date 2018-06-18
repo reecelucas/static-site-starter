@@ -1,0 +1,25 @@
+/* ==========================================================================
+   #COVER
+   ========================================================================== */
+
+/**
+ *  Mixin to stretch an element across its parent.
+ *
+ *  .parent {
+ *      position: relative;
+ *  }
+ *
+ *  .cover {
+ *      @include cover;
+ *  }
+ */
+
+ @mixin cover {
+    height: 100%;
+    position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    width: 100%;
+}

@@ -1,0 +1,21 @@
+/* ==========================================================================
+   #LIST-INLINE
+   ========================================================================== */
+
+.o-list-inline {
+    list-style: none;
+    margin-left: 0;
+
+    li {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+
+/* Style variants
+   ========================================================================== */
+
+.o-list-inline--centered {
+    text-align: center;
+}

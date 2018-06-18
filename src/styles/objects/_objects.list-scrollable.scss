@@ -1,0 +1,27 @@
+/* ==========================================================================
+   #LIST-SCROLLABLE
+   ========================================================================== */
+
+/**
+ * 1. Hide scrollbars where possible (no FF support).
+ * 2: Inertial scroll on iOS.
+ */
+
+.o-list-scrollable {
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+    -ms-overflow-style: none; /* [1] */
+
+    &::-webkit-scrollbar { /* [1] */
+        display: none !important;
+        width: 0 !important;
+    }
+    -webkit-overflow-scrolling: touch; /* [2] */
+
+    li {
+        display: inline-block;
+        white-space: normal;
+    }
+}

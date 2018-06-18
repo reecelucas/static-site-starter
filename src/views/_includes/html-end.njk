@@ -1,0 +1,35 @@
+        <script>
+            (function(d) {
+                var scripts = ['js/main.js']; // Script for all users
+                var newBrowser = (
+                    'fetch' in window &&
+                    'Promise' in window &&
+                    'assign' in Object &&
+                    'keys' in Object
+                );
+
+                /**
+                 * If the 'fonts-loaded' class has not already been set on the `<html>`,
+                 * prepend the font-loading script to the start of the scripts array.
+                 */
+                if (d.documentElement.className.indexOf('fonts-loaded') === -1) {
+                    scripts.unshift('js/font-loading-fallback.js');
+                }
+
+                if (!newBrowser) {
+                    scripts.unshift('js/es2015.polyfills.js'); // Script for older browsers
+                }
+
+                scripts.forEach(function(src) {
+                    var scriptEl = d.createElement('script');
+                    scriptEl.src = src;
+                    scriptEl.async = false;
+                    d.head.appendChild(scriptEl);
+                });
+
+                // Replace `no-js` class on `<html>` with `js`
+                d.documentElement.className = d.documentElement.className.replace(/\bno-js\b/g, 'js');
+            })(document);
+        </script>
+    </body>
+</html>

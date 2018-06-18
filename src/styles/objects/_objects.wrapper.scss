@@ -1,0 +1,33 @@
+/* ==========================================================================
+   #WRAPPER
+   ========================================================================== */
+
+.o-wrapper {
+    display: block;
+    margin: {
+        right: auto;
+        left: auto;
+    }
+    max-width: $global-site-max-width;
+    padding: {
+        right: rem-calc($global-spacing-unit);
+        left: rem-calc($global-spacing-unit);
+    }
+    position: relative;
+}
+
+
+/* Style variants
+   ========================================================================== */
+
+.o-wrapper--narrow {
+	max-width: 800px;
+}
+
+.o-wrapper--fw {
+	max-width: none;
+}
+
+.o-wrapper--no-pad {
+	padding: 0;
+}
