@@ -134,7 +134,7 @@ gulp.task('scss', () => {
             gulpif(
                 isProduction,
                 purgecss({
-                    content: [paths.html.src]
+                    content: [paths.html.src, paths.js.src]
                 })
             )
         )
