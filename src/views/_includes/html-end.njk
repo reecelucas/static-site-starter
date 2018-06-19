@@ -1,20 +1,12 @@
         <script>
             (function(d) {
-                var scripts = ['js/main.js']; // Script for all users
+                var scripts = ['js/main.js']; // Script(s) for all users
                 var newBrowser = (
                     'fetch' in window &&
                     'Promise' in window &&
                     'assign' in Object &&
                     'keys' in Object
                 );
-
-                /**
-                 * If the 'fonts-loaded' class has not already been set on the `<html>`,
-                 * prepend the font-loading script to the start of the scripts array.
-                 */
-                if (d.documentElement.className.indexOf('fonts-loaded') === -1) {
-                    scripts.unshift('js/font-loading-fallback.js');
-                }
 
                 if (!newBrowser) {
                     scripts.unshift('js/es2015.polyfills.js'); // Script for older browsers
