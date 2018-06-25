@@ -9,6 +9,7 @@ const gulpif = require('gulp-if');
 const merge = require('merge-stream');
 const minimist = require('minimist');
 const path = require('path');
+const runSequence = require('run-sequence');
 const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
 const portscanner = require('portscanner');
@@ -33,6 +34,9 @@ const purgecss = require('gulp-purgecss');
 const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
 const inlinesource = require('gulp-inline-source');
+
+// SERVICE WORKER
+const workbox = require('workbox-build');
 
 // Helpers
 const CLI_ARGUMENTS = minimist(process.argv.slice(2), { string: 'env' });
@@ -65,6 +69,7 @@ const paths = {
     },
     js: {
         src: './src/js/**/*.js',
+        ignore: ['./src/js/utilities/**/*.js'],
         dest: './dist'
     },
     assets: {
@@ -99,7 +104,7 @@ gulp.task('reload', done => {
 
 gulp.task('templates', shell.task('eleventy'));
 
-gulp.task('html', ['inlineCritial'], () =>
+gulp.task('html', () =>
     gulp
         .src(paths.html.src)
         .pipe(
@@ -144,7 +149,7 @@ gulp.task('scss', () => {
 
 gulp.task('js', () =>
     merge(
-        glob.sync(paths.js.src).map(entry => {
+        glob.sync(paths.js.src, { ignore: paths.js.ignore }).map(entry => {
             // Take file name from full path & strip `.js` extension
             const fileName = entry.replace(/^.*[\\/]/, '').slice(0, -3);
 
@@ -190,7 +195,7 @@ gulp.task('copy', () =>
     gulp.src(paths.copy.src).pipe(gulp.dest(paths.copy.dest))
 );
 
-gulp.task('inlineCritial', ['templates', 'assets', 'scss', 'js'], () =>
+gulp.task('inlineCritial', () =>
     gulp
         .src(paths.html.src)
         .pipe(
@@ -199,6 +204,31 @@ gulp.task('inlineCritial', ['templates', 'assets', 'scss', 'js'], () =>
             })
         )
         .pipe(gulp.dest(paths.html.dest))
+);
+
+gulp.task('generate-service-worker', () =>
+    workbox
+        .generateSW({
+            globDirectory: 'dist',
+            globPatterns: [
+                // `css` is inlined so we don't need to cache it
+                '**/*.{html,js,woff,woff2,png,jpg,svg}'
+            ],
+            swDest: `./dist/sw.js`,
+            clientsClaim: true,
+            skipWaiting: true
+        })
+        .then(({ warnings }) => {
+            // In case there are any warnings from workbox-build, log them
+            warnings.forEach(warning => {
+                console.warn(warning);
+            });
+
+            console.info('Service worker generation completed.');
+        })
+        .catch(error => {
+            console.warn('Service worker generation failed:', error);
+        })
 );
 
 gulp.task('watch', () => {
@@ -213,6 +243,33 @@ gulp.task('watch', () => {
     gulp.watch(paths.assets.src, ['assets', 'reload']);
 });
 
-gulp.task('default', ['templates', 'scss', 'js', 'assets', 'copy', 'serve', 'watch']);
-gulp.task('build', ['html', 'scss', 'js', 'assets', 'copy', 'serve']);
-gulp.task('build:server', ['html', 'scss', 'js', 'assets', 'copy']);
+gulp.task('default', () => {
+    runSequence('templates', 'assets', 'scss', 'js', 'copy', 'serve', 'watch');
+});
+
+gulp.task('build', () => {
+    runSequence(
+        'templates',
+        'assets',
+        'scss',
+        'js',
+        'copy',
+        'inlineCritial',
+        'html',
+        'generate-service-worker',
+        'serve'
+    );
+});
+
+gulp.task('build:server', () => {
+    runSequence(
+        'templates',
+        'assets',
+        'scss',
+        'js',
+        'copy',
+        'inlineCritial',
+        'html',
+        'generate-service-worker'
+    );
+});
