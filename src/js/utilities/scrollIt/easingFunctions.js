@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus, no-param-reassign */
 
 // Adapted from: https://gist.github.com/gre/1650294
-const easingFunctions = {
+export default {
     // No easing, no acceleration
     linear(t) {
         return t;
@@ -69,5 +69,3 @@ const easingFunctions = {
         return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
     }
 };
-
-export default easingFunctions;
