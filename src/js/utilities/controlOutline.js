@@ -16,7 +16,7 @@ const restoreFocusState = () => {
     setCss('');
 };
 
-export default function controlOutline() {
+export default () => {
     head.appendChild(styleElem);
     /**
      * Use `mousedown` instead of `mouseover`, so that previously focused

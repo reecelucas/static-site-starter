@@ -4,12 +4,12 @@ const html = document.documentElement;
 const { body } = document;
 
 // Modified from: https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
-export default function scrollIt({
+export default ({
     destination,
     duration = 400,
     easing = 'linear',
     callback
-}) {
+}) => {
     // Store initial scroll position and time
     const start = window.pageYOffset;
     const startTime = new Date().getTime();

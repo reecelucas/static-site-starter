@@ -55,30 +55,32 @@ const assignAvailablePort = initialPort => {
     return port;
 };
 
+const srcDir = './src';
+const buildDir = './dist';
 const paths = {
     templates: {
-        src: './src/views/**/*'
+        src: `${srcDir}/views/**/*`
     },
     html: {
-        src: './dist/*.html',
-        dest: './dist'
+        src: `${buildDir}/*.html`,
+        dest: `${buildDir}`
     },
     scss: {
-        src: './src/styles/**/*.scss',
-        dest: './dist/css'
+        src: `${srcDir}/styles/**/*.scss`,
+        dest: `${buildDir}/css`
     },
     js: {
-        src: './src/js/**/*.js',
-        ignore: ['./src/js/utilities/**/*.js'],
-        dest: './dist'
+        src: `${srcDir}/js/**/*.js`,
+        ignore: [`${srcDir}/js/utilities/**/*.js`],
+        dest: `${buildDir}`
     },
     assets: {
-        src: './src/assets/**/*',
-        dest: './dist/assets'
+        src: `${srcDir}/assets/**/*`,
+        dest: `${buildDir}/assets`
     },
     copy: {
-        src: './src/_headers',
-        dest: './dist'
+        src: `${srcDir}/_headers`,
+        dest: `${buildDir}`
     }
 };
 
@@ -209,12 +211,31 @@ gulp.task('inlineCritial', () =>
 gulp.task('generate-service-worker', () =>
     workbox
         .generateSW({
-            globDirectory: 'dist',
+            globDirectory: `${buildDir}`,
             globPatterns: [
-                // `css` is inlined so we don't need to cache it
-                '**/*.{html,js,woff,woff2,png,jpg,svg}'
+                /**
+                 * These resources will be precached (i.e. cached before being
+                 * requested by the browser). `css` is inlined so we don't need to
+                 * cache it (since we're already precaching the `html`).
+                 */
+                '**/*.{html,json,js,woff,woff2}'
             ],
-            swDest: `./dist/sw.js`,
+            "globIgnores": [
+                '**/head.js' // Inlined into `html`, so no need to cache it
+            ],
+            /**
+             * Rather than precaching images, which would take up a lot of space,
+             * we add them to the cache as they're requested (i.e. cache them
+             * at runtime).
+             */
+            runtimeCaching: [
+                {
+                    // Match any request ending with `.png`, .`jpg`, `.jpeg` or `.svg`
+                    urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
+                    handler: 'cacheFirst'
+                }
+            ],
+            swDest: `${buildDir}/sw.js`,
             clientsClaim: true,
             skipWaiting: true
         })
