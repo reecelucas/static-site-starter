@@ -1,4 +1,5 @@
 {
+    "build": 1,
     "title": "Static Site Starter",
     "description": "Simple static site starter using Eleventy, Gulp & Rollup",
     "url": "https://example.com",

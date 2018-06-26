@@ -1,6 +1,6 @@
         <script>
             (function(d) {
-                var scripts = ['js/main.js']; // Script(s) for all users
+                var scripts = ['js/main.js?{{ metadata.build }}']; // Script(s) for all users
                 var newBrowser = (
                     'fetch' in window &&
                     'Promise' in window &&
