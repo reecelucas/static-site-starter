@@ -1,0 +1,26 @@
+{
+    "title": "Static Site Starter",
+    "description": "Simple static site starter using Eleventy, Gulp & Rollup",
+    "url": "https://example.com",
+    "social_share_image": "/assets/images/social-share-image.jpg",
+    "social_share_image_alt": "Screenshot of example.com",
+    "author": {
+        "name": "Reece Lucas",
+        "url": "https://reecelucas.com",
+        "email": "reecelucas@sky.com",
+        "social": [
+            {
+                "label": "GitHub",
+                "url": "https://github.com/reecelucas"
+            },
+            {
+                "label": "Twitter",
+                "url": "https://twitter.com/rjilucas"
+            },
+            {
+                "label": "LinkedIn",
+                "url": "https://www.linkedin.com/in/reecelucas/"
+            }
+        ]
+    }
+}

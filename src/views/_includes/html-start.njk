@@ -4,37 +4,35 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ title }}</title>
+        <title>{{ metadata.title }}</title>
 
-        <link rel="preload" href="assets/fonts/work-sans-300.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="assets/fonts/work-sans-400.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="preload" href="assets/fonts/work-sans-600.woff2" as="font" type="font/woff2" crossorigin>
+        {% for font in webfonts.fonts %}
+            <link rel="preload" href="{{ font.path }}" as="font" type="font/woff2" crossorigin>
+        {% endfor %}
 
         {# `data-inline` attribute used by gulp `inlineCritial` task #}
         <link href="css/main.css" rel="stylesheet" type="text/css" data-inline>
         <script src="js/head.js" data-inline></script>
 
-        {% if canonical_url %}
-            <link rel="canonical" href="{{ canonical_url }}">
-        {% endif %}
-        <meta name="description" content="{{ description }}">
+        <link rel="canonical" href="{{ metadata.url }}">
+        <meta name="description" content="{{ metadata.description }}">
 
         <link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-touch-icon.png">
         <link rel="icon" type="image/png" href="assets/favicons/favicon-32x32.png" sizes="32x32">
         <link rel="icon" type="image/png" href="assets/favicons/favicon-16x16.png" sizes="16x16">
         <link rel="mask-icon" href="assets/favicons/safari-pinned-tab.svg">
         <link rel="shortcut icon" href="assets/favicons/favicon.ico">
-        <meta name="msapplication-config" content="assets/favicons/browserconfig.xml">
+        <meta name="msapplication-config" content="assets/favicons/browsermetadata.xml">
         <link rel="manifest" href="assets/favicons/manifest.json">
         <meta name="theme-color" content="#ffffff">
 
-        <meta property="og:title" content="{{ title }}">
-        <meta property="og:description" content="{{ description }}">
-        <meta property="og:image" content="{{ site_url }}{{ social_share_image }}">
-        <meta property="og:url" content="{{ site_url }}">
+        <meta property="og:title" content="{{ metadata.title }}">
+        <meta property="og:description" content="{{ metadata.description }}">
+        <meta property="og:image" content="{{ metadata.url }}{{ metadata.social_share_image }}">
+        <meta property="og:url" content="{{ metadata.url }}">
         <meta name="twitter:card" content="summary">
-        <meta name="og:site_name" content="{{ title }}">
-        <meta name="twitter:image:alt" content="{{ social_share_image_alt }}">
+        <meta name="og:site_name" content="{{ metadata.title }}">
+        <meta name="twitter:image:alt" content="{{ metadata.social_share_image_alt }}">
     </head>
 
     <body>

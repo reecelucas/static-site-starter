@@ -1,0 +1,19 @@
+{
+    "fonts": [
+        {
+            "name": "Work Sans",
+            "weight": 300,
+            "path": "assets/fonts/work-sans-300.woff2"
+        },
+        {
+            "name": "Work Sans",
+            "weight": 400,
+            "path": "assets/fonts/work-sans-400.woff2"
+        },
+        {
+            "name": "Work Sans",
+            "weight": 600,
+            "path": "assets/fonts/work-sans-600.woff2"
+        }
+    ]
+}
