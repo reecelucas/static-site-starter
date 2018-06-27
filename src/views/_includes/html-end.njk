@@ -1,6 +1,6 @@
         <script>
             (function(d) {
-                var scripts = ['js/main.js?{{ metadata.build }}']; // Script(s) for all users
+                var scripts = ['js/main.js']; // Script(s) for all users
                 var newBrowser = (
                     'fetch' in window &&
                     'Promise' in window &&
@@ -14,7 +14,7 @@
 
                 scripts.forEach(function(src) {
                     var scriptEl = d.createElement('script');
-                    scriptEl.src = src;
+                    scriptEl.src = `${src}?{{ metadata.build }}`; // Cache bust
                     scriptEl.async = false;
                     d.head.appendChild(scriptEl);
                 });
