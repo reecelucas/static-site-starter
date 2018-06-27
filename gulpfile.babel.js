@@ -220,7 +220,7 @@ gulp.task('generate-service-worker', () =>
                  */
                 '**/*.{html,json,js,woff,woff2}'
             ],
-            "globIgnores": [
+            globIgnores: [
                 '**/head.js' // Inlined into `html`, so no need to cache it
             ],
             /**
