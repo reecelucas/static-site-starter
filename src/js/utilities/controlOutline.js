@@ -24,4 +24,4 @@ export default () => {
      */
     document.addEventListener('mousedown', removeFocusState);
     document.addEventListener('keydown', restoreFocusState);
-}
+};

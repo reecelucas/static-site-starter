@@ -32,7 +32,7 @@
         "format": "prettier --write 'src/js/**/*.js'",
         "test": "jest",
         "test:coverage": "jest --coverage --collectCoverageFrom 'src/js/**/*.js'",
-        "precommit": "npm run lint && npm run format"
+        "precommit": "yarn lint && yarn format"
     },
     "dependencies": {
         "babel-polyfill": "^6.26.0",

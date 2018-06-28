@@ -1,0 +1,47 @@
+/* ==========================================================================
+   #SKIP-LINK
+   ========================================================================== */
+
+$skip-link-transition-timing: cubic-bezier(0.18, 0.89, 0.32, 1.28) !default;
+$skip-link-border-radius: 8px !default;
+$skip-link-width: 200px !default;
+
+.c-skip-link {
+    clip: rect(1px, 1px, 1px, 1px);
+    font: {
+        size: $font-size-5;
+        weight: 600;
+    }
+    height: 1px;
+    overflow: hidden;
+    outline: none !important;
+    padding: {
+        top: rem-calc($global-spacing-unit-tiny);
+        bottom: rem-calc($global-spacing-unit-tiny);
+    }
+    position: absolute;
+        top: 0;
+        left: 50%;
+    text-align: center;
+    transform: translate(-50%, -100%);
+    transition: transform 0.4s $skip-link-transition-timing;
+    white-space: nowrap;
+    width: 1px;
+
+    &:focus {
+        background-color: $colour-four;
+        border: {
+            bottom-right-radius: $skip-link-border-radius;
+            bottom-left-radius: $skip-link-border-radius;
+        }
+        clip: auto;
+        color: $colour-one;
+        height: auto;
+        overflow: visible;
+        position: fixed;
+        transform: translate(-50%, -4px);
+        white-space: normal;
+        width: $skip-link-width;
+        z-index: $z-index-skip-link;
+    }
+}
