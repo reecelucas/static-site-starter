@@ -3,9 +3,9 @@
         Skip to content
     </a>
 
-    {% if page.navigation %}
+    {% if app.navigation %}
         <nav class="c-nav">
-            {% for item in page.navigation %}
+            {% for item in app.navigation %}
                 <a
                     href="{{ item.href }}"
                     class="c-nav__item {% if page.url == item.href %}is-active{% endif %}"
