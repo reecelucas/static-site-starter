@@ -1,0 +1,19 @@
+/* ==========================================================================
+   #NAV
+   ========================================================================== */
+
+.c-nav {
+    display: flex;
+}
+
+.c-nav__item {
+
+    &:not(:last-child) {
+        margin-right: rem-calc($global-spacing-unit);
+    }
+
+    &.is-active {
+        text-decoration: underline;
+    }
+
+}

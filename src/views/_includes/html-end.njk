@@ -1,6 +1,6 @@
         <script>
             (function(d) {
-                var scripts = ['js/main.js']; // Script(s) for all users
+                var scripts = ['/js/main.js']; // Script(s) for all users
                 var newBrowser = (
                     'fetch' in window &&
                     'Promise' in window &&
@@ -9,7 +9,7 @@
                 );
 
                 if (!newBrowser) {
-                    scripts.unshift('js/es2015.polyfills.js'); // Script for older browsers
+                    scripts.unshift('/js/es2015.polyfills.js'); // Script for older browsers
                 }
 
                 scripts.forEach(function(src) {

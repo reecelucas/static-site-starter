@@ -1,0 +1,18 @@
+<header>
+    <a href="#content" class="c-skip-link">
+        Skip to content
+    </a>
+
+    {% if page.navigation %}
+        <nav class="c-nav">
+            {% for item in page.navigation %}
+                <a
+                    href="{{ item.href }}"
+                    class="c-nav__item {% if page.url == item.href %}is-active{% endif %}"
+                >
+                    {{ item.label }}
+                </a>
+            {% endfor %}
+        </nav>
+    {% endif  %}
+</header>

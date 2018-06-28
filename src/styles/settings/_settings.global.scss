@@ -58,6 +58,7 @@ $global-spacing-unit-huge:  64px !default;
 /* Z-indexes
    ========================================================================== */
 
-$z-index-beneath: -1 !default;
-$z-index-base:     1 !default;
-$z-index-modal:    2 !default;
+$z-index-beneath:  -1 !default;
+$z-index-base:      1 !default;
+$z-index-modal:     2 !default;
+$z-index-skip-link: 3 !default;

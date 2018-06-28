@@ -42,7 +42,9 @@
  *  Wrapper..............Page constraint object.
  *
  *
- *	COMPONENTS:
+ *  COMPONENTS:
+ *  Nav..................Global primary navigation.
+ *  Skip-link............Accessible skip-to-content link.
  *
  *
  *  UTILITIES:
@@ -88,7 +90,8 @@
 @import "objects/objects.wrapper";
 
 
-// @import components here...
+@import "components/components.nav";
+@import "components/components.skip-link";
 
 
 @import "utilities/utilities.colour";
