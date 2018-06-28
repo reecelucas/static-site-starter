@@ -1,4 +1,14 @@
 {
+    "navigation": [
+        {
+            "label": "Home",
+            "href": "/"
+        },
+        {
+            "label": "About",
+            "href": "/about/"
+        }
+    ],
     "fonts": [
         {
             "name": "Work Sans",
