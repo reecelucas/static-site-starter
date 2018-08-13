@@ -13,7 +13,7 @@ const runSequence = require('run-sequence');
 const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
 const portscanner = require('portscanner');
-const shell = require('gulp-shell');
+const { spawn } = require('child_process');
 
 // JS
 const babel = require('rollup-plugin-babel');
@@ -104,7 +104,9 @@ gulp.task('reload', done => {
     done();
 });
 
-gulp.task('templates', shell.task('eleventy'));
+gulp.task('templates', () => {
+    spawn('eleventy');
+});
 
 gulp.task('html', () =>
     gulp
